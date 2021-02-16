@@ -1,0 +1,5 @@
+/node_modules
+/__test__
+/__mock__
+/coverage
+/nodemon.json
