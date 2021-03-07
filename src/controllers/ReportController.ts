@@ -31,7 +31,7 @@ const ReportController =
         if(req.query.procedureIds) for(const procedureId of req.query.procedureIds) appointmentData = appointmentData.filter(a => a.procedureId === procedureId);
         //resgata procedimentos e profissionais
         const procedureIds: string[] = [];
-        const professionalIds = []
+        const professionalIds: string[] = []
         for(let appointment of appointmentData)
         {
             if(procedureIds.indexOf(appointment.procedureId) === -1) procedureIds.push(appointment.procedureId);

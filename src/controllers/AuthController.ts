@@ -42,6 +42,7 @@ const AuthController =
             if(decoded.permission === requiredPermission)
             {
                 req.userId = decoded.userId;
+                req.permission = decoded.permission;
                 next();
             }
             else throw new Error('Unauthorized');

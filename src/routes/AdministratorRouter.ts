@@ -11,6 +11,7 @@ AdministratorRouter.get('/establishment/professional', EstablishmentController.g
 AdministratorRouter.post('/establishment/create', EstablishmentController.createEstablishment);
 AdministratorRouter.put('/establishment/edit-professionals', EstablishmentController.editProfessionals);
 AdministratorRouter.put('/establishment/edit-procedures', EstablishmentController.editProcedures);
+AdministratorRouter.get('/schedules', AppointmentController.getAppointments);
 AdministratorRouter.put('/appointment/confirm', AppointmentController.confirmEstablishment);
 
 export default AdministratorRouter;

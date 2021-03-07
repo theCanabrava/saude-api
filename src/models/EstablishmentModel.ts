@@ -6,6 +6,11 @@ export default class EstablishmentModel
     {
         return await Current.connection.fetchBunch(DataType.ESTABLISHMENT);
     }
+
+    static async getSelection(establishmentIds: string[]): Promise<EstablishmentData[]>
+    {
+        return await Current.connection.fetchMany(DataType.ESTABLISHMENT, establishmentIds);
+    }
     
     data: EstablishmentData =
     {

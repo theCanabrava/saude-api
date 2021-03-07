@@ -2,6 +2,11 @@ import { Current, DataType } from './DBConnection';
 
 export default class PacientModel
 {
+    static async getSelection(pacientIds: string[]): Promise<PacientData[]>
+    {
+        return await Current.connection.fetchMany(DataType.PACIENT, pacientIds);
+    }
+    
     data: PacientData =
     {
         name: '',
