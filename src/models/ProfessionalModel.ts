@@ -12,6 +12,12 @@ export default class ProfessionalModel
         return await Current.connection.findMany(DataType.PROFESSIONAL, {specialty});
     }
 
+    static async getSelection(professionalIds: string[]): Promise<ProfessionalData[]>
+    {
+        const list = await Current.connection.fetchMany(DataType.PROFESSIONAL, professionalIds);
+        return list;
+    }
+
     data: ProfessionalData =
     {
         name: '',

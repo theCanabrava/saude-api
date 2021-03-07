@@ -1,6 +1,8 @@
 import AppointmentModel from "../models/AppointmentModel";
 import EstablishmentModel from "../models/EstablishmentModel"
 import ProcedureModel from "../models/ProcedureModel";
+import ProfessionalModel from "../models/ProfessionalModel";
+import { Current } from "./Writter";
 
 const ReportController =
 {
@@ -20,26 +22,63 @@ const ReportController =
 
     sendRepport: async (req: any, res: any) =>
     {
+        //resgata estabelecimento
         const establishment = new EstablishmentModel();
-        await establishment.load(req.body.establishmentId);
+        await establishment.load(req.query.establishmentId);
+        //resgata consultas
         let appointmentData = await AppointmentModel.getDataList(establishment.data.appointmentIds);
-        if(req.body.range) appointmentData = appointmentData.filter(a => (a.date >= req.body.range[0] && a.date <= req.body.range[1]));
-        for(const procedureId of req.body.procedureIds) appointmentData = appointmentData.filter(a => a.procedureId === procedureId);
-        
-        try
+        if(req.query.range) appointmentData = appointmentData.filter(a => (a.date >= req.query.range[0] && a.date <= req.query.range[1]));
+        if(req.query.procedureIds) for(const procedureId of req.query.procedureIds) appointmentData = appointmentData.filter(a => a.procedureId === procedureId);
+        //resgata procedimentos e profissionais
+        const procedureIds: string[] = [];
+        const professionalIds = []
+        for(let appointment of appointmentData)
         {
-            const content =
+            if(procedureIds.indexOf(appointment.procedureId) === -1) procedureIds.push(appointment.procedureId);
+            if(professionalIds.indexOf(appointment.professionalId) === -1) professionalIds.push(appointment.professionalId);
+        }
+        const procedureData = await ProcedureModel.getSelection(procedureIds);
+        const professionalData = await ProfessionalModel.getSelection(professionalIds);
+        //constroi conteudo
+        const content = ReportController.generateReportContent(req, establishment, appointmentData, procedureData, professionalData);
+        //cria pdf
+        await Current.writter.write(content);
+        res.download('./output.pdf', 'relatorio.pdf', (err: any) => {if(err) console.log(err)});
+    },
+
+    generateReportContent: (req: any, establishment: any, appointmentData: any, procedureData: any, professionalData: any) =>
+    {
+        const appointments: any[] = [];
+        const startDate = new Date(req.query.range[0]);
+        const endDate = new Date(req.query.range[1]);
+        const content =
+        {
+            establishment: 
             {
-                contentTemplate: 'HO_REPPORT',
-                establishment,
-                appointmentData
-            }
-            res.status(200).json({content});
+                name: establishment.data.name,
+                address: establishment.data.address,
+            },
+            report:
+            {
+                startDate: `${startDate.getDate()}/${startDate.getMonth()+1}/${startDate.getFullYear()}`,
+                endDate: `${endDate.getDate()}/${endDate.getMonth()+1}/${endDate.getFullYear()}`
+            },
+            appointments: appointments
         }
-        catch(err)
+        for(let appointment of appointmentData)
         {
-            res.status(500).json({error: err.message});
+            const appointmentDate = new Date(appointment.date);
+            content.appointments.push(
+                {
+                    id: appointment.id,
+                    date:  `${appointmentDate.getDate()}/${appointmentDate.getMonth()+1}/${appointmentDate.getFullYear()}`,
+                    time: appointment.time,
+                    procedure: {name: procedureData.find((p: any) => p.id === appointment.procedureId)?.name},
+                    professional: {name: professionalData.find((p: any) => p.id === appointment.professionalId)?.name}
+                }
+            )
         }
+        return content;
     }
 }
 

@@ -15,6 +15,9 @@ import MongoConnection from './src/database/MongoConnection';
 import { Current as CurrentN } from './src/controllers/Notifier';
 import EmailNotifier from './src/notifier/EmailNotifier';
 
+import { Current as CurrentW } from './src/controllers/Writter';
+import PDFWritter from './src/writter/PDFWritter';
+
 //Server set uo
 
 const app = express();
@@ -40,3 +43,6 @@ CurrentDb.connection = new MongoConnection();
 
 // Email set up
 CurrentN.notifier = new EmailNotifier();
+
+//Writter set up
+CurrentW.writter = new PDFWritter();
