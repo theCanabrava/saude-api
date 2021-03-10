@@ -152,7 +152,6 @@ const AppointmentController =
             await appointment.load(req.body.appointmentId);
             await appointment.confirmProfessional(professional.data.id!);
 
-            //await AppointmentController.notifyPatient(appointment);
             res.status(200).json({appointment: appointment.data});
         }
         catch(err)
@@ -172,7 +171,6 @@ const AppointmentController =
             await appointment.load(req.body.appointmentId);
             await appointment.confirmEstablishment(establishment.data.id!);
 
-            //await AppointmentController.notifyPatient(appointment);
             res.status(200).json({appointment: appointment.data});
         }
         catch(err)
@@ -181,18 +179,22 @@ const AppointmentController =
         }
     },
 
-    notifyPatient: async (appointment: AppointmentModel) =>
+    finishAppointment: async (req: any, res: any) =>
     {
-        if(appointment.data.status.professionalConfirmed && appointment.data.status.establishmentConfirmed)
+        try
         {
-            const content =
-            {
-                contentTemplate: 'APPOINTMENT_CONFIRMED',
-                appointment: appointment
-            }
-            await Current.notifier.send(appointment.data.pacientId, content);
+            const appointment = new AppointmentModel();
+            await appointment.load(req.body.appointmentId);
+            await appointment.finishAppointment([]);
+            res.status(200).json({appointment: appointment.data});
+        }
+        catch(err)
+        {
+            res.status(500).json({error: err.message});
         }
     }
+
+
 }
 
 export default AppointmentController;

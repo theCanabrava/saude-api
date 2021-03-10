@@ -5,6 +5,14 @@ import ProfessionalModel from "../models/ProfessionalModel";
 
 const EstablishmentController =
 {
+    getEstablishments: async (req: any, res: any) =>
+    {
+        const admin = new AdministratorModel();
+        await admin.load(req.userId);
+        const establishmentData = await EstablishmentModel.getSelection(admin.data.establishmentIds);
+        res.status(200).json({establishments: [...establishmentData]});   
+    },
+
     getProcedure: async (req: any, res: any) =>
     {
         const procedure = new ProcedureModel();

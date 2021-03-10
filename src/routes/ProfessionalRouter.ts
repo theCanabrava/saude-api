@@ -7,5 +7,6 @@ const ProfessionalRouter = express.Router();
 ProfessionalRouter.use(AuthController.professionalMiddleware);
 ProfessionalRouter.get('/schedules', AppointmentController.getAppointments);
 ProfessionalRouter.put('/schedule/confirm', AppointmentController.confirmProfessional);
+ProfessionalRouter.put('/schedule/finish', AppointmentController.finishAppointment);
 
 export default ProfessionalRouter;
