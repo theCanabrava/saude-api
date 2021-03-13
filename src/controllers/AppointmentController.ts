@@ -4,8 +4,6 @@ import EstablishmentModel from "../models/EstablishmentModel";
 import PacientModel from "../models/PacientModel";
 import ProcedureModel from "../models/ProcedureModel";
 import ProfessionalModel from "../models/ProfessionalModel";
-import moment from 'moment';
-import { Current } from "./Notifier";
 
 const AppointmentController =
 {
