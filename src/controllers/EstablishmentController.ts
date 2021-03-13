@@ -32,14 +32,14 @@ const EstablishmentController =
         console.log('Getting establishment')
         const admin = new AdministratorModel();
         await admin.load(req.userId);
-        if(!admin.hasEstablishment(req.params.establishmentId))
+        if(!admin.hasEstablishment(req.query.establishmentId))
         {
             res.status(403).json({error: new Error('Administrator is not responsable for establishment')});
             return;
         }
 
         const establishment = new EstablishmentModel();
-        await establishment.load(req.params.establishmentId);
+        await establishment.load(req.query.establishmentId);
         const professionalData = await ProfessionalModel.getSelection(establishment.data.professionalIds);
         const procedureData = await ProcedureModel.getSelection(establishment.data.procedureIds);
 
