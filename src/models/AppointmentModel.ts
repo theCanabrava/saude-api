@@ -7,6 +7,11 @@ export default class AppointmentModel
         return await Current.connection.fetchMany(DataType.APPOINTMENT, appointmentId);
     }
 
+    static async getProfessionalSchedule(professionalId: string, date: string): Promise<AppointmentData[]>
+    {
+        return await Current.connection.findMany(DataType.APPOINTMENT, {professionalId, date})
+    }
+
     data: AppointmentData =
     {
         pacientId: '',

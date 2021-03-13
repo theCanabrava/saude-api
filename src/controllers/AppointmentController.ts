@@ -4,6 +4,7 @@ import EstablishmentModel from "../models/EstablishmentModel";
 import PacientModel from "../models/PacientModel";
 import ProcedureModel from "../models/ProcedureModel";
 import ProfessionalModel from "../models/ProfessionalModel";
+import moment from 'moment';
 import { Current } from "./Notifier";
 
 const AppointmentController =
@@ -96,6 +97,36 @@ const AppointmentController =
         };
         professionals = professionals.filter((p: any) => p.establishmentId === req.query.establishmentId);
         res.status(200).json({professionals: [...professionals]});
+    },
+
+    getAvailableTime: async (req: any, res: any) =>
+    {
+        //resgatar consultas do especialista
+        const appointmentData = await AppointmentModel.getProfessionalSchedule(req.query.professionalId, req.query.date);
+        //resgatar procedimentos das consultas
+        const procedureIds: any[] = [];
+        for(const appointment of appointmentData) if(procedureIds.indexOf(appointment.procedureId) === -1) procedureIds.push(appointment.procedureId);
+        const procedureData = await ProcedureModel.getSelection(procedureIds);
+        //calcular tempo ocupado no dia
+        const occupiedTime: any[] = [];
+        for(const appointment of appointmentData)
+        {
+            const procedure = procedureData.find(p => p.id === appointment.procedureId);
+            occupiedTime.push(
+                {
+                    start: appointment.time,
+                    end: addTimes(appointment.time, procedure!.time)
+                }
+            )
+        }
+        //resgatar tempo de atendimento do profissional
+        const professional = new ProfessionalModel();
+        await professional.load(req.query.professionalId);
+        let times = [professional.data.availability.startTime];
+        while(times[times.length-1] < professional.data.availability.endTime) times.push(addTimes(times[times.length-1], '00:30'));
+        //remover tempo ocupado
+        for(const time of occupiedTime) times = times.filter(t => !(time.start<=t && time.end>t));
+        res.status(200).json({availability: [...times]});
     },
     
 
@@ -198,3 +229,19 @@ const AppointmentController =
 }
 
 export default AppointmentController;
+
+let addTimes = (time1: string, time2: string) => {
+    let [h1, m1] = time1.split(':')
+    let [h2, m2] = time2.split(':')
+    
+    let h = Number(h1) + Number(h2);
+    let m = Number(m1) + Number(m2);
+
+    while(m >= 60)
+    {
+        m -= 60;
+        h += 1;
+    }
+
+    return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`
+}

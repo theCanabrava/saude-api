@@ -18,7 +18,8 @@ export default class ProcedureModel
     {
         name: '',
         time: '00:00',
-        specialties: []
+        specialties: [],
+        type: 'Consulta'
     }
 
     load = async (id: string) =>
@@ -46,5 +47,6 @@ interface ProcedureData
     id?: string,
     name: string,
     time: string,
-    specialties: string[]
+    specialties: string[],
+    type: string
 }

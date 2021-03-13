@@ -9,6 +9,7 @@ PacientRouter.get('/schedules', AppointmentController.getAppointments);
 PacientRouter.get('/schedule/establishments', AppointmentController.getEstablishments);
 PacientRouter.get('/schedule/procedures', AppointmentController.getProcedures);
 PacientRouter.get('/schedule/professionals', AppointmentController.getProfessionals);
+PacientRouter.get('/schedule/availability', AppointmentController.getAvailableTime);
 PacientRouter.post('/schedule/create', AppointmentController.schedule);
 
 export default PacientRouter;

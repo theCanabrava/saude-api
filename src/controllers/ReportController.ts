@@ -73,7 +73,7 @@ const ReportController =
                     id: appointment.id,
                     date:  `${appointmentDate.getDate()}/${appointmentDate.getMonth()+1}/${appointmentDate.getFullYear()}`,
                     time: appointment.time,
-                    procedure: {name: procedureData.find((p: any) => p.id === appointment.procedureId)?.name},
+                    procedure: {...procedureData.find((p: any) => p.id === appointment.procedureId)},
                     professional: {name: professionalData.find((p: any) => p.id === appointment.professionalId)?.name}
                 }
             )

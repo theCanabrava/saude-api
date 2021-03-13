@@ -14,20 +14,20 @@
         <table class="ui celled table">
             <thead>
                 <tr>
-                    <th>Id</th>
                     <th>Data</th>
                     <th>Horário</th>
                     <th>Procedimento</th>
+                    <th>Tipo</th>
                     <th>Profissional</th>
                 </tr>
             </thead>
             <tbody>
                 {{#each appointments}}
                     <tr>
-                        <td data-label="Id">{{this.id}}</td>
                         <td data-label="Data">{{this.date}}</td>
                         <td data-label="Horário">{{this.time}}</td>
                         <td data-label="Procedimento">{{this.procedure.name}}</td>
+                        <td data-label="Tipo">{{this.procedure.type}}</td>
                         <td data-label="Profissional">{{this.professional.name}}</td>
                     </tr>
                 {{/each}}
