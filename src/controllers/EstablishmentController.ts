@@ -27,6 +27,32 @@ const EstablishmentController =
         res.status(200).json({professional: professional.data});            
     },
 
+    getEstablishment: async (req: any, res: any) =>
+    {
+        console.log('Getting establishment')
+        const admin = new AdministratorModel();
+        await admin.load(req.userId);
+        if(!admin.hasEstablishment(req.params.establishmentId))
+        {
+            res.status(403).json({error: new Error('Administrator is not responsable for establishment')});
+            return;
+        }
+
+        const establishment = new EstablishmentModel();
+        await establishment.load(req.params.establishmentId);
+        const professionalData = await ProfessionalModel.getSelection(establishment.data.professionalIds);
+        const procedureData = await ProcedureModel.getSelection(establishment.data.procedureIds);
+
+        const inflatedEstablishment =
+        {
+            ...establishment.data,
+            professionals: professionalData,
+            procedures: procedureData
+        }
+
+        res.status(200).json({establishment: inflatedEstablishment});
+    },
+
     createEstablishment: async (req: any, res: any) =>
     {
         const admin = new AdministratorModel();
@@ -66,7 +92,7 @@ const EstablishmentController =
         }
     },
 
-    editProfessionals: async (req: any, res: any) =>
+    editEstablishment: async (req: any, res: any) =>
     {
         const admin = new AdministratorModel();
         await admin.load(req.userId);
@@ -77,41 +103,30 @@ const EstablishmentController =
         }
 
         const establishment = new EstablishmentModel();
-        await establishment.load(req.body.establishmentId)
-        
-        try
+        if(!(await establishment.addressAvailable(req.body.address)))
         {
-            await establishment.updateProfessionals(req.body.professionalIds)
-            req.status(200).json({status: 'Updated', data: establishment.data})
-        }
-        catch(err)
-        {
-            req.status(500).json({error: err.message})
-        }
-    },
-
-    editProcedures: async (req: any, res: any) =>
-    {
-        const admin = new AdministratorModel();
-        await admin.load(req.userId);
-        if(!admin.hasEstablishment(req.body.establishmentId))
-        {
-            res.status(403).json({error: new Error('Administrator is not responsable for establishment')});
+            res.status(403).json({error: new Error('Address unavailable')});
             return;
         }
-
-        const establishment = new EstablishmentModel();
-        await establishment.load(req.body.establishmentId)
         
-        try
+        await establishment.load(req.body.establishmentId);
+        await establishment.store(
+            {
+                name: req.body.name,
+                type: req.body.type,
+                address: req.body.address,
+                professionalIds: req.body.professionalIds,
+                procedureIds: req.body.procedureIds,
+                appointmentIds: establishment.data.appointmentIds
+            }
+        )
+        for(let id of establishment.data.professionalIds)
         {
-            await establishment.updateProcedures(req.body.procedureId)
-            req.status(200).json({status: 'Updated', data: establishment.data})
+            const professional = new ProfessionalModel();
+            await professional.load(id);
+            await professional.attachEstablishment(req.body.establishmentId);
         }
-        catch(err)
-        {
-            req.status(500).json({error: err.message})
-        }
+        res.status(200).json({establishment: establishment.data})
     }
 }
 
