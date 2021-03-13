@@ -3,9 +3,14 @@
   "version": "0.0.0",
   "description": "API do projeto do sistema virtual de saúde pública elaborado para o TCC da Pós graduação em Engenharia de Software da PUC Minas em 2021 ",
   "main": "index.ts",
+  "engines": 
+  {
+    "ts-node": "8.10.1"
+  },
   "scripts": {
     "test": "jest",
-    "start": "nodemon -x ts-node index.ts"
+    "start": "ts-node index.ts",
+    "dev": "nodemon -x ts-node index.ts"
   },
   "author": "Victor Canabrava Teixeira Rodrigues",
   "license": "ISC",
