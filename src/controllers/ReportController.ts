@@ -73,6 +73,7 @@ const ReportController =
 
     generateReportContent: (req: any, establishment: any, appointmentData: any, procedureData: any, professionalData: any) =>
     {
+        console.log(establishment);
         const appointments: any[] = [];
         const startDate = new Date(req.query.range[0]);
         const endDate = new Date(req.query.range[1]);
