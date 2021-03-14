@@ -78,7 +78,11 @@ const ReportController =
         const endDate = new Date(req.query.range[1]);
         let admissions = establishment.data.admissions.filter((a: any) => (a.date >= req.query.range[0] && a.date <= req.query.range[1]));
         console.log(admissions);
-        admissions = admissions.map((a: any) => ({...a, date: `${a.getDate()}/${a.getMonth()+1}/${a.getFullYear()}`}));
+        admissions = admissions.map((a: any) => 
+        {
+            const date = new Date(a.date);
+            return {...a, date: `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`};
+        });
         console.log(admissions);
         const content =
         {
