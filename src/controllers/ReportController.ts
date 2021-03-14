@@ -28,7 +28,12 @@ const ReportController =
         //resgata consultas
         let appointmentData = await AppointmentModel.getDataList(establishment.data.appointmentIds);
         if(req.query.range) appointmentData = appointmentData.filter(a => (a.date >= req.query.range[0] && a.date <= req.query.range[1]));
-        if(req.query.procedureIds) for(const procedureId of req.query.procedureIds) appointmentData = appointmentData.filter(a => a.procedureId === procedureId);
+        if(req.query.procedureIds)
+        {
+            let filteredAppointments: any[] = [];
+            for(const procedureId of req.query.procedureIds)filteredAppointments = [...filteredAppointments, ...appointmentData.filter(a => a.procedureId === procedureId)];
+            appointmentData = filteredAppointments;
+        } 
 
         if(appointmentData.length > 0) res.status(200).json({appointmentCount: appointmentData.length});
         else res.status(404).json({error: 'Periodo selecionado não possui consultas ou exames.'});
@@ -42,7 +47,13 @@ const ReportController =
         //resgata consultas
         let appointmentData = await AppointmentModel.getDataList(establishment.data.appointmentIds);
         if(req.query.range) appointmentData = appointmentData.filter(a => (a.date >= req.query.range[0] && a.date <= req.query.range[1]));
-        if(req.query.procedureIds) for(const procedureId of req.query.procedureIds) appointmentData = appointmentData.filter(a => a.procedureId === procedureId);
+        //if(req.query.procedureIds) for(const procedureId of req.query.procedureIds) appointmentData = appointmentData.filter(a => a.procedureId === procedureId);
+        if(req.query.procedureIds)
+        {
+            let filteredAppointments: any[] = [];
+            for(const procedureId of req.query.procedureIds)filteredAppointments = [...filteredAppointments, ...appointmentData.filter(a => a.procedureId === procedureId)];
+            appointmentData = filteredAppointments;
+        } 
         //resgata procedimentos e profissionais
         const procedureIds: string[] = [];
         const professionalIds: string[] = []
