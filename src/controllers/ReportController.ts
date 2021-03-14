@@ -73,17 +73,18 @@ const ReportController =
 
     generateReportContent: (req: any, establishment: any, appointmentData: any, procedureData: any, professionalData: any) =>
     {
-        console.log(establishment);
+        console.log(establishment.admissions);
         const appointments: any[] = [];
         const startDate = new Date(req.query.range[0]);
         const endDate = new Date(req.query.range[1]);
+        const admissions = establishment.admissions;
         const content =
         {
             establishment: 
             {
                 name: establishment.data.name,
                 address: establishment.data.address,
-                admissions: establishment.admissions.filter((a: any) => (a.date >= req.query.range[0] && a.date <= req.query.range[1]))
+                admissions: admissions,
             },
             report:
             {
