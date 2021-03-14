@@ -20,6 +20,20 @@ const ReportController =
         res.status(200).json({procedure: procedure.data});           
     },
 
+    checkReport: async (req: any, res: any) =>
+    {
+        //resgata estabelecimento
+        const establishment = new EstablishmentModel();
+        await establishment.load(req.query.establishmentId);
+        //resgata consultas
+        let appointmentData = await AppointmentModel.getDataList(establishment.data.appointmentIds);
+        if(req.query.range) appointmentData = appointmentData.filter(a => (a.date >= req.query.range[0] && a.date <= req.query.range[1]));
+        if(req.query.procedureIds) for(const procedureId of req.query.procedureIds) appointmentData = appointmentData.filter(a => a.procedureId === procedureId);
+
+        if(appointmentData.length > 0) res.status(200).json({appointmentCount: appointmentData.length});
+        else res.status(404).json({error: 'Periodo selecionado não possui consultas ou exames.'});
+    },
+
     sendRepport: async (req: any, res: any) =>
     {
         //resgata estabelecimento

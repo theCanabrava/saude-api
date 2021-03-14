@@ -7,6 +7,7 @@ const HealthOrganizationRouter = express.Router();
 HealthOrganizationRouter.use(AuthController.hoMiddleware);
 HealthOrganizationRouter.get('/report/establishment', ReportController.getEstablishment);
 HealthOrganizationRouter.get('/report/procedure', ReportController.getProcedure);
+HealthOrganizationRouter.get('/report/check', ReportController.checkReport);
 HealthOrganizationRouter.get('/report/generate', ReportController.sendRepport);
 
 export default HealthOrganizationRouter;
