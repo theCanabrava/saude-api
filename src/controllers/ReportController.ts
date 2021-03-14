@@ -73,11 +73,13 @@ const ReportController =
 
     generateReportContent: (req: any, establishment: any, appointmentData: any, procedureData: any, professionalData: any) =>
     {
-        console.log(establishment.data.admissions);
         const appointments: any[] = [];
         const startDate = new Date(req.query.range[0]);
         const endDate = new Date(req.query.range[1]);
-        const admissions = establishment.data.admissions.filter((a: any) => (a.date >= req.query.range[0] && a.date <= req.query.range[1]));
+        let admissions = establishment.data.admissions.filter((a: any) => (a.date >= req.query.range[0] && a.date <= req.query.range[1]));
+        console.log(admissions);
+        admissions = admissions.map((a: any) => ({...a, date: `${a.getDate()}/${a.getMonth()+1}/${a.getFullYear()}`}));
+        console.log(admissions);
         const content =
         {
             establishment: 
