@@ -103,13 +103,14 @@ const EstablishmentController =
         }
 
         const establishment = new EstablishmentModel();
+        await establishment.load(req.body.establishmentId);
         if(!(await establishment.addressAvailable(req.body.address)))
         {
+            console.log('Throwing for same address');
             res.status(403).json({error: new Error('Address unavailable')});
             return;
         }
-        
-        await establishment.load(req.body.establishmentId);
+
         await establishment.store(
             {
                 name: req.body.name,
