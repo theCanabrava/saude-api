@@ -80,4 +80,5 @@ interface EstablishmentData
     professionalIds: string[],
     procedureIds: string[],
     appointmentIds: string[],
+    admissions?: {date: string, ammount: string}[],
 }

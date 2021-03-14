@@ -2,15 +2,15 @@
 <html>
     <head>
         <mate charest="utf-8" />
-        <title>Relatório de Agendamentos</title>
+        <title>Relatório</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"/>
     </head>
     <body class="ui container">
-        <h1>Relatório de Agendamentos</h1>
+        <h1>Relatório</h1>
         <h2>{{establishment.name}}</h2>
         <p><strong>Endereço:</strong> {{establishment.address}}</p>
         <p><strong>Periodo do relatório:</strong> de {{report.startDate}} a {{report.endDate}}</p>
-        <h2>Consultas</h2>
+        <h2>Consultas e Exames</h2>
         <table class="ui celled table">
             <thead>
                 <tr>
@@ -29,6 +29,23 @@
                         <td data-label="Procedimento">{{this.procedure.name}}</td>
                         <td data-label="Tipo">{{this.procedure.type}}</td>
                         <td data-label="Profissional">{{this.professional.name}}</td>
+                    </tr>
+                {{/each}}
+            </tbody>
+        </table>
+        <h2>Internações</h2>
+        <table class="ui celled table">
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Internações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each establishment.admissions}}
+                    <tr>
+                        <td data-label="Data">{{this.date}}</td>
+                        <td data-label="Internações">{{this.ammount}}</td>
                     </tr>
                 {{/each}}
             </tbody>

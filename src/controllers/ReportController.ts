@@ -82,6 +82,7 @@ const ReportController =
             {
                 name: establishment.data.name,
                 address: establishment.data.address,
+                admissions: establishment.admissions.filter((a: any) => (a.date >= req.query.range[0] && a.date <= req.query.range[1]))
             },
             report:
             {
