@@ -43,9 +43,12 @@ export default class EstablishmentModel
 
     addressAvailable = async (address: string) => 
     {
-        const id = await Current.connection.findOne(DataType.ESTABLISHMENT, {address});
-        if(this.data.id) if(id === this.data.id) return true;
-        if(id) return false;
+        const establishment = await Current.connection.findOne(DataType.ESTABLISHMENT, {address});
+        console.log(establishment.id);
+        console.log(this.data.id);
+        console.log(this.data.id === establishment.id);
+        if(this.data.id) if(establishment.id === this.data.id) return true;
+        if(establishment) return false;
         else return true;
     };
 
