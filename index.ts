@@ -12,9 +12,6 @@ import PacientRouter from './src/routes/PacientRouter';
 import { Current as CurrentDb } from './src/models/DBConnection';
 import MongoConnection from './src/database/MongoConnection';
 
-import { Current as CurrentN } from './src/controllers/Notifier';
-import EmailNotifier from './src/notifier/EmailNotifier';
-
 import { Current as CurrentW } from './src/controllers/Writter';
 import PDFWritter from './src/writter/PDFWritter';
 
@@ -31,6 +28,12 @@ app.use('/administrator', AdministratorRouter);
 app.use('/professional', ProfessionalRouter)
 app.use('/pacient', PacientRouter);
 
+app.use((err, req, res, next) => 
+{
+    console.error(err.stack);
+    res.status(500).json({err: err.message});
+});
+
 const PORT = process.env.PORT || 8000;
 
 app.listen(PORT, () =>
@@ -40,9 +43,6 @@ app.listen(PORT, () =>
 
 // Database set up
 CurrentDb.connection = new MongoConnection();
-
-// Email set up
-CurrentN.notifier = new EmailNotifier();
 
 //Writter set up
 CurrentW.writter = new PDFWritter();
