@@ -1,7 +1,7 @@
 # Diagramas
 
 ## Diagrama de componentes
-![alt componentes](Server.svg)
+![alt componentes](Servidor.svg)
 
 ## Diagrama de integração
 ![alt integração](Integration.svg)
