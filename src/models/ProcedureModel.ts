@@ -4,7 +4,7 @@ export default class ProcedureModel
 {
     static async getList(): Promise<ProcedureData[]>
     {
-        const list = await Current.connection.fetchBunch(DataType.PROCEDURE);
+        const list = await Current.connection.fetchAll(DataType.PROCEDURE);
         return list;
     }
 

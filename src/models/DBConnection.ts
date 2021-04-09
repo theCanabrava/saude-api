@@ -4,7 +4,7 @@ export default interface DBConnection
     findOne(type: string, filter: any): Promise<any>;
     fetchMany(type: string, id: string[]): Promise<any>;
     findMany(type: string, filter: any): Promise<any>;
-    fetchBunch(type: string): Promise<any>;
+    fetchAll(type: string): Promise<any>;
     write(type: string, obj: any): Promise<string>;
 }
 

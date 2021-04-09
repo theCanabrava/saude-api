@@ -68,7 +68,7 @@ export default class MongoConnection implements DBConnection
         return results;
     }
 
-    async fetchBunch(type: string): Promise<any>
+    async fetchAll(type: string): Promise<any>
     {
         const found = await this.db.collection(type).find().toArray();
         const results = [];

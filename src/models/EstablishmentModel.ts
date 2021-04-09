@@ -4,7 +4,7 @@ export default class EstablishmentModel
 {
     static async getList(): Promise<EstablishmentData[]>
     {
-        return await Current.connection.fetchBunch(DataType.ESTABLISHMENT);
+        return await Current.connection.fetchAll(DataType.ESTABLISHMENT);
     }
 
     static async getSelection(establishmentIds: string[]): Promise<EstablishmentData[]>

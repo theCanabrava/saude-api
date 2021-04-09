@@ -4,7 +4,7 @@ export default class ProfessionalModel
 {
     static async getList(): Promise<ProfessionalData[]>
     {
-        return await Current.connection.fetchBunch(DataType.PROFESSIONAL);
+        return await Current.connection.fetchAll(DataType.PROFESSIONAL);
     }
 
     static async getSpecialists(specialty: string): Promise<ProfessionalData[]>
